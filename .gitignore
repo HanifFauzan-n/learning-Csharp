@@ -1,0 +1,23 @@
+# File dan folder yang dihasilkan oleh sistem build .NET
+[Bb]in/
+[Oo]bj/
+
+# File yang dihasilkan oleh IDE (Visual Studio, VS Code, Rider)
+.vs/
+.vscode/
+*.user
+*.suo
+
+# File konfigurasi lokal yang mungkin berisi rahasia
+appsettings.Development.json
+secrets.json
+
+# File sistem operasi
+*.swp
+*~
+Thumbs.db
+
+# Cache dan log
+*.log
+*.nupkg
+*.nuget.cache
