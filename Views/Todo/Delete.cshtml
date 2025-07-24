@@ -1,0 +1,18 @@
+@model todo_list.Models.TodoItem
+
+<h1>Hapus Tugas</h1>
+<h3>Apakah anda yakin ingin menghapus ini</h3>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Tugas</dt>
+        <dt class="col-sm-10">@Model.Title</dt>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Hapus" class="btn btn-danger" />|
+        <a asp-action="Index">Batal</a>
+    </form>
+</div>
