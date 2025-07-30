@@ -3,21 +3,19 @@
 <h1>Buat Tugas Baru</h1>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control">
-                <span asp-validation-for="Title" class="text-danger"></span>
+    <div class="col-md-8">
+        <form asp-action="Create" class="p-4 border rounded bg-light">
+            <div class="form-group mb-3">
+                <label asp-for="Title" class="control-label mb-1" ></label>
+                <input asp-for="Title" class="form-control-lg mb-1 col-md-6" placeholder="Apa yang perlu dikerjakan ?" type="text">
+                <span asp-asp-validation-for="Title" class="text-danger"></span>
             </div>
-            <br/>
             <div class="form-group">
-                <input type="submit" value="Simpan" class="btn btn-primary" />
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-2"></i>
+                </button>
+                <a asp-action="Index" class="btn btn-secondary ms-2">Kembali</a>
             </div>
         </form>
     </div>
-</div>
-<br>
-<div>
-    <a asp-action="Index">Kembali ke Daftar</a>
 </div>

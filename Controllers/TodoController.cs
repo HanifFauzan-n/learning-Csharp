@@ -2,21 +2,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using todo_list.Data;
 using todo_list.Models;
+using todo_list.Services;
 
 namespace todo_list.Controllers
 {
     public class TodoController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ITodoService _todoService;
 
-        public TodoController(ApplicationDbContext context)
+        public TodoController(ITodoService todoService)
         {
-            _context = context;
+            _todoService = todoService;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TodoItems.ToListAsync());
+            var items = await _todoService.GetAllAsync();
+            return View(items);
         }
 
         public IActionResult Create()
@@ -30,8 +32,7 @@ namespace todo_list.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(todoItem);
-                await _context.SaveChangesAsync();
+                await _todoService.CreateAsync(todoItem);
                 return RedirectToAction(nameof(Index));
             }
             return View(todoItem);
@@ -40,7 +41,7 @@ namespace todo_list.Controllers
         public async Task<IActionResult> Get(int? id)
         {
             if (id == null) return NotFound();
-            var todoItem = await _context.TodoItems.FindAsync(id);
+            var todoItem = await _todoService.GetByIdAsync(id.Value);
             if (todoItem == null) return NotFound();
 
             return View(todoItem);
@@ -54,8 +55,8 @@ namespace todo_list.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Update(todoItem);
-                await _context.SaveChangesAsync();
+                await _todoService.UpdateAsync(todoItem);
+ 
                 return RedirectToAction(nameof(Index));
             }
             return View(todoItem);
@@ -64,7 +65,7 @@ namespace todo_list.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
-            var todoItem = await _context.TodoItems.FirstOrDefaultAsync(m => m.Id == id);
+            var todoItem = await _todoService.GetByIdAsync(id.Value);
             if (todoItem == null) return NotFound();
 
             return View(todoItem);
@@ -74,12 +75,7 @@ namespace todo_list.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var todoItem = await _context.TodoItems.FindAsync(id);
-            if (todoItem != null)
-            {
-                _context.TodoItems.Remove(todoItem);
-            }
-            await _context.SaveChangesAsync();
+            await _todoService.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     } 
