@@ -11,7 +11,13 @@ namespace todo_list.Models
 
         public bool IsCompleted { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        [Display(Name = "Waktu Mulai")]
+        [DataType(DataType.Time)]
+        public TimeOnly StartDate { get; set; } 
+        
+        [Display(Name = "Waktu Berakhir")]
+        [DataType(DataType.Time)]
+        public TimeOnly EndDate { get; set; } 
 
     }
 }

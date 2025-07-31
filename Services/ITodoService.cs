@@ -9,5 +9,6 @@ namespace todo_list.Services
         Task CreateAsync(TodoItem todoItem);
         Task UpdateAsync(TodoItem todoItem);
         Task DeleteAsync(int id);
+        Task ToggleIsCompletedAsync(int id);
     }
 }
