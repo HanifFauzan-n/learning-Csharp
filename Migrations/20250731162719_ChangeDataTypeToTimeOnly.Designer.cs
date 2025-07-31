@@ -12,8 +12,8 @@ using todo_list.Data;
 namespace todo_list.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250722170439_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250731162719_ChangeDataTypeToTimeOnly")]
+    partial class ChangeDataTypeToTimeOnly
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,11 +33,14 @@ namespace todo_list.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                    b.Property<TimeOnly>("EndDate")
+                        .HasColumnType("time(6)");
 
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<TimeOnly>("StartDate")
+                        .HasColumnType("time(6)");
 
                     b.Property<string>("Title")
                         .IsRequired()
