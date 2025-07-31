@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Daftar Tugas";
+    var currentSort = ViewData["CurrentSort"] as string ?? "title";
 }
 
 <div class="container mt-5">
@@ -15,6 +16,19 @@
                     <a asp-action="Create" class="btn btn-light">
                         <i class="fas fa-plus me-1"></i> Buat Tugas Baru
                     </a>
+                </div>
+                <div class="card-body border-bottom">
+                    <form asp-action="Index" method="get" class="d-flex justify-content-end">
+                        <div class="d-flex align-items-center">
+                            <label class="me-2">Urutkan:</label>
+                            <select name="sortBy" class="form-select form-select-sm" onchange="this.form.submit()">
+                                <option value="title" selected="@(currentSort == "title")" >Alphabet (A-Z)</option>
+                                <option value="date" selected="@(currentSort == "date")" >Waktu (Asc)</option>
+                                <option value="desc_title" selected="@(currentSort == "desc_title")" >Alphabet (Z-A)</option>
+                                <option value="desc_date" selected="@(currentSort == "desc_date")" >Waktu (Desc)</option>
+                            </select>
+                        </div>
+                    </form>
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-flush">

@@ -15,9 +15,12 @@ namespace todo_list.Controllers
             _todoService = todoService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? sortBy)
         {
-            var items = await _todoService.GetAllAsync();
+            Console.WriteLine($"DEBUG Controller Menerima: '{sortBy ?? "null"}'");
+
+            ViewData["CurrentSort"] = sortBy;
+            var items = await _todoService.GetAllAsync(sortBy);
             return View(items);
         }
 
@@ -47,7 +50,17 @@ namespace todo_list.Controllers
             return View(todoItem);
         }
 
-        [HttpPost]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null) return NotFound();
+            var todoItem = await _todoService.GetByIdAsync(id.Value);
+
+            if (todoItem == null) return NotFound();
+            return View(todoItem);
+        }
+
+
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,IsCompleted,StartDate,EndDate")] TodoItem todoItem)
         {
@@ -86,5 +99,5 @@ namespace todo_list.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-    } 
+    }
 }

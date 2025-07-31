@@ -32,9 +32,20 @@ namespace todo_list.Services
             }
         }
 
-        public async Task<IEnumerable<TodoItem>> GetAllAsync()
+        public async Task<IEnumerable<TodoItem>> GetAllAsync(string? sortBy)
         {
-            return await _context.TodoItems.ToListAsync();
+
+            var items = _context.TodoItems.AsQueryable();
+            items = sortBy switch
+            {
+                "title" => items.OrderBy(s => s.Title),
+                "date" => items.OrderBy(s => s.StartDate),
+                "desc_date" => items.OrderByDescending(s => s.StartDate),
+                "desc_title" => items.OrderByDescending(s => s.Title),
+                _ => items.OrderBy(s => s.Title),
+            };
+            Console.WriteLine($"DEBUG Service Menerima: '{sortBy ?? "null"}'");
+            return await items.ToListAsync();
         }
 
 
