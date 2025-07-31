@@ -28,7 +28,7 @@ namespace todo_list.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title")] TodoItem todoItem)
+        public async Task<IActionResult> Create([Bind("Title,StartDate,EndDate")] TodoItem todoItem)
         {
             if (ModelState.IsValid)
             {
@@ -49,14 +49,14 @@ namespace todo_list.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,IsCompleted,CreatedAt")] TodoItem todoItem)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,IsCompleted,StartDate,EndDate")] TodoItem todoItem)
         {
             if (id != todoItem.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
                 await _todoService.UpdateAsync(todoItem);
- 
+
                 return RedirectToAction(nameof(Index));
             }
             return View(todoItem);
@@ -76,6 +76,14 @@ namespace todo_list.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _todoService.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ToggleIsCompleted(int id)
+        {
+            await _todoService.ToggleIsCompletedAsync(id);
+
             return RedirectToAction(nameof(Index));
         }
     } 
