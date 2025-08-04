@@ -1,26 +1,4 @@
-:root {
-  --bg-color: #f4f7f6;
-  --text-color: #212529;
-  --card-bg-color: #ffffff;
-  --card-header-bg-color: #0d6efd;
-  --card-header-text-color: #ffffff;
-  --border-color: #dee2e6;
-  --muted-text-color: #6c757d;
-  --primary-text-bold-color: #0d6efd;
-}
-
-body.dark-mode {
-  --bg-color: #1a202c;
-  --text-color: #cbd5e0;
-  --card-bg-color: #2d3748;
-  --card-header-bg-color: #4a5568;
-  --card-header-text-color: #e2e8f0;
-  --border-color: #4a5568;
-  --muted-text-color: #a0aec0;
-  --primary-text-bold-color: #63b3ed;
-}
-
-html {
+zhtml {
   font-size: 14px;
 }
 
@@ -30,11 +8,7 @@ html {
   }
 }
 
-.btn:focus,
-.btn:active:focus,
-.btn-link.nav-link:focus,
-.form-control:focus,
-.form-check-input:focus {
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
@@ -43,37 +17,3 @@ html {
   min-height: 100%;
 }
 
-body {
-  font-family: 'Poppins', sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-}
-
-.card {
-    background-color: var(--card-bg-color);
-    border-color: var(--border-color);
-}
-
-.card-header {
-    background-color: var(--card-header-bg-color) !important;
-    color: var(--card-header-text-color) !important;
-}
-
-.list-group-item {
-    background-color: var(--card-bg-color); /* Atau var(--list-item-bg) jika ingin beda */
-    border-color: var(--border-color);
-}
-
-.text-muted {
-    color: var(--muted-text-color) !important;
-}
-
-.form-select {
-    background-color: var(--card-bg-color);
-    color: var(--text-color);
-    border-color: var(--border-color);
-}
-
-small.text-primary {
-    color: var(--primary-text-bold-color) !important;
-}
