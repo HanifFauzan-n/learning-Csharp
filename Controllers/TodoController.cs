@@ -15,12 +15,14 @@ namespace todo_list.Controllers
             _todoService = todoService;
         }
 
-        public async Task<IActionResult> Index(string? sortBy)
+        public async Task<IActionResult> Index(string? sortBy, string? searchString)
         {
-            Console.WriteLine($"DEBUG Controller Menerima: '{sortBy ?? "null"}'");
+            // Console.WriteLine($"DEBUG Controller Menerima: '{sortBy ?? "null"}'");
+            Console.WriteLine($"DEBUG Controller Menerima: '{searchString ?? "null"}'");
 
             ViewData["CurrentSort"] = sortBy;
-            var items = await _todoService.GetAllAsync(sortBy);
+            ViewData["CurrentFilter"] = searchString;
+            var items = await _todoService.GetAllAsync(sortBy,searchString);
             return View(items);
         }
 
@@ -31,7 +33,7 @@ namespace todo_list.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,StartDate,EndDate")] TodoItem todoItem)
+        public async Task<IActionResult> Create([Bind("Title,StartDate,EndDate,Priority")] TodoItem todoItem)
         {
             if (ModelState.IsValid)
             {
@@ -62,7 +64,7 @@ namespace todo_list.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,IsCompleted,StartDate,EndDate")] TodoItem todoItem)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,IsCompleted,StartDate,EndDate,Priority")] TodoItem todoItem)
         {
             if (id != todoItem.Id) return NotFound();
 

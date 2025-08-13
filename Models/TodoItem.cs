@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using todo_list.Enums;
 
 namespace todo_list.Models
 {
@@ -13,11 +14,13 @@ namespace todo_list.Models
 
         [Display(Name = "Waktu Mulai")]
         [DataType(DataType.Time)]
-        public TimeOnly StartDate { get; set; } 
-        
+        public TimeOnly StartDate { get; set; }
+
         [Display(Name = "Waktu Berakhir")]
         [DataType(DataType.Time)]
         public TimeOnly EndDate { get; set; } 
+        
+        public PriorityLevels Priority { get; set; }
 
     }
 }

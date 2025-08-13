@@ -4,7 +4,7 @@ namespace todo_list.Services
 {
     public interface ITodoService
     {
-        Task<IEnumerable<TodoItem>> GetAllAsync(string? sortBy);
+        Task<IEnumerable<TodoItem>> GetAllAsync(string? sortBy, string? searchString);
         Task<TodoItem?> GetByIdAsync(int id);
         Task CreateAsync(TodoItem todoItem);
         Task UpdateAsync(TodoItem todoItem);
