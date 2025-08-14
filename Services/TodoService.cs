@@ -39,23 +39,23 @@ namespace todo_list.Services
             if (!string.IsNullOrEmpty(searchString))
             {
                 query = query.Where(s => s.Title!.Contains(searchString));
-                return await query.ToListAsync();
+                
             }
 
-            var items = _context.TodoItems.AsQueryable();
-            items = sortBy switch
+            
+            query = sortBy switch
             {
-                "title" => items.OrderBy(s => s.Title),
-                "date" => items.OrderBy(s => s.StartDate),
-                "desc_date" => items.OrderByDescending(s => s.StartDate),
-                "desc_title" => items.OrderByDescending(s => s.Title),
-                "priority" => items.OrderBy(s => s.Priority),
-                "desc_priority" => items.OrderByDescending(s => s.Priority),
-                _ => items.OrderBy(s => s.Title),
+                "title" => query.OrderBy(s => s.Title),
+                "date" => query.OrderBy(s => s.StartDate),
+                "desc_date" => query.OrderByDescending(s => s.StartDate),
+                "desc_title" => query.OrderByDescending(s => s.Title),
+                "priority" => query.OrderBy(s => s.Priority),
+                "desc_priority" => query.OrderByDescending(s => s.Priority),
+                _ => query.OrderBy(s => s.Title),
             };
             // Console.WriteLine($"DEBUG Service Menerima: '{sortBy ?? "null"}'");
             Console.WriteLine($"DEBUG Service Menerima: '{searchString ?? "null"}'");
-            return await items.ToListAsync();
+            return await query.ToListAsync();
         }
 
 
