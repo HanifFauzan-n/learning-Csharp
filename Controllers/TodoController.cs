@@ -3,9 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using todo_list.Data;
 using todo_list.Models;
 using todo_list.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace todo_list.Controllers
 {
+    [Authorize]
     public class TodoController : Controller
     {
         private readonly ITodoService _todoService;
@@ -22,7 +24,7 @@ namespace todo_list.Controllers
 
             ViewData["CurrentSort"] = sortBy;
             ViewData["CurrentFilter"] = searchString;
-            var items = await _todoService.GetAllAsync(sortBy,searchString);
+            var items = await _todoService.GetAllAsync(sortBy, searchString);
             return View(items);
         }
 

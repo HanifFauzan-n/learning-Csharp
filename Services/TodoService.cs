@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using todo_list.Data;
 using todo_list.Models;
 using System.Globalization;
+using System.Security.Claims;
 
 namespace todo_list.Services
 {
@@ -9,15 +10,23 @@ namespace todo_list.Services
     {
         TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
         private readonly ApplicationDbContext _context;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public TodoService(ApplicationDbContext context)
+        public TodoService(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _contextAccessor = httpContextAccessor;
+        }
+
+        private string GetCurrentUserId()
+        {
+            var userId = _contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return userId ?? throw new Exception("User not authentication");
         }
 
         public async Task CreateAsync(TodoItem todoItem)
         {
-            todoItem.Title = textInfo.ToTitleCase(todoItem.Title);
+            todoItem.UserId = GetCurrentUserId();
             _context.Add(todoItem);
             await _context.SaveChangesAsync();
         }
@@ -34,15 +43,18 @@ namespace todo_list.Services
 
         public async Task<IEnumerable<TodoItem>> GetAllAsync(string? sortBy, string? searchString)
         {
-            var query = _context.TodoItems.AsQueryable();
+            var currentUserId = GetCurrentUserId();
+            var query = _context.TodoItems
+                                .Where(t => t.UserId == currentUserId).
+                                AsQueryable();
 
             if (!string.IsNullOrEmpty(searchString))
             {
                 query = query.Where(s => s.Title!.Contains(searchString));
-                
+
             }
 
-            
+
             query = sortBy switch
             {
                 "title" => query.OrderBy(s => s.Title),
@@ -61,12 +73,29 @@ namespace todo_list.Services
 
         public async Task<TodoItem?> GetByIdAsync(int id)
         {
-            return await _context.TodoItems.FindAsync(id);
+            var currentUserId = GetCurrentUserId();
+
+            return await _context.TodoItems
+                    .FirstOrDefaultAsync(t => t.Id == id && t.UserId == currentUserId);
         }
 
         public async Task UpdateAsync(TodoItem todoItem)
         {
-            todoItem.Title = textInfo.ToTitleCase(todoItem.Title);
+            var currentUserId = GetCurrentUserId();
+            var originalTodoItem = await _context.TodoItems.FirstOrDefaultAsync(t => t.Id == todoItem.Id && t.UserId == currentUserId);
+
+            if (originalTodoItem == null)
+            {
+                return ;
+            }
+
+
+            originalTodoItem.Title = textInfo.ToTitleCase(todoItem.Title);
+            originalTodoItem.IsCompleted = todoItem.IsCompleted;
+            originalTodoItem.Priority = todoItem.Priority;
+            originalTodoItem.StartDate = todoItem.StartDate;
+            originalTodoItem.EndDate = todoItem.EndDate;
+            
             _context.Update(todoItem);
             await _context.SaveChangesAsync();
         }

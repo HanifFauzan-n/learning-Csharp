@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using todo_list.Enums;
+using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace todo_list.Models
 {
@@ -18,9 +20,14 @@ namespace todo_list.Models
 
         [Display(Name = "Waktu Berakhir")]
         [DataType(DataType.Time)]
-        public TimeOnly EndDate { get; set; } 
-        
+        public TimeOnly EndDate { get; set; }
+
         public PriorityLevels Priority { get; set; }
+
+        public string? UserId { get; set; }
+
+        [ForeignKey("UserId")]
+        public virtual IdentityUser? User { get; set; }
 
     }
 }
