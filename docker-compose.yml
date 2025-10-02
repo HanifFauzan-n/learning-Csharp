@@ -1,0 +1,30 @@
+services:
+  # Layanan untuk aplikasi web Anda
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=db;Database=db_todolist;User=root;Password=your_strong_password;
+    depends_on:
+      db:
+        condition: service_healthy # <-- UBAH BAGIAN INI
+
+  # Layanan untuk database MySQL
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: your_strong_password
+      MYSQL_DATABASE: db_todolist
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck: 
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql_data:
